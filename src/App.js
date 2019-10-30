@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
+import TodoList from './TodoList'
+import Nav from './Nav'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+var id = 0
+class App extends Component{
+  constructor(props) {
+    super(props);
+    this.state={
+      text: '',
+      todos: []
+    }
+  }
+  changeText = x => {
+    this.setState({text: x})
+  }
+
+  addTodo = todo => {
+    let newTodo = {to: todo, id: id++, completed: false}
+    this.setState({todos: [...this.state.todos, newTodo]})
+    this.setState({text: ''})
+  }
+  deleteTodo = id => {
+    this.setState({
+      todos: this.state.todos.filter(el => el.id !== id)
+    })
+  }
+  render(){
+    return (
+      <div className="App">
+          <Nav text={this.state.text} changeText={(a) => this.changeText(a)} addTodo={() => this.addTodo(this.state.text)}/>
+          <TodoList listTodos={this.state.todos} deleteTodo={(id) => this.deleteTodo(id)}/>
+          
+      </div>
+    );
+  }
 }
 
 export default App;
